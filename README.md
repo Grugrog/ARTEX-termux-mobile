@@ -1,6 +1,6 @@
 <div align="center">
 
-# ARTEX-Mobile
+# ARTEX-termux-mobile
 
 AI autonomous penetration testing system (Go backend + Next.js frontend)
 
