@@ -1567,3 +1567,18 @@ CREATE TABLE IF NOT EXISTS rsi_lesson_usage (
     shown_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
     PRIMARY KEY (lesson_id, task_id, mode)
 );
+
+-- Semantic re-rank cache for RSI lessons (see db/lesson_rerank.go). Opt-in via
+-- ARTEX_EMBED_URL; when unset this table is simply never written. Vectors are
+-- stored as a JSONB float array so there is no pgvector dependency. source_hash
+-- is the sha256 of the embedded text, so a changed cue/action invalidates the
+-- cached vector. One row per (lesson, embedding model).
+CREATE TABLE IF NOT EXISTS rsi_lesson_embeddings (
+    lesson_id   BIGINT NOT NULL REFERENCES rsi_lessons(id) ON DELETE CASCADE,
+    model       TEXT   NOT NULL,
+    dim         INT    NOT NULL,
+    vec         JSONB  NOT NULL,
+    source_hash TEXT   NOT NULL,
+    updated_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    PRIMARY KEY (lesson_id, model)
+);

@@ -47,11 +47,17 @@ func (s *Server) wireTaskLessons(t *Task, wk *agent.Worker, pl *agent.Planner) {
 	if err != nil {
 		return
 	}
-	lessons, err := s.m.PG().TaskLessons(context.Background(), taskID, 8)
+	// Pull a widened, scope/evidence-ranked candidate pool, then narrow it to the
+	// inject count by semantic similarity to the task goal. Re-ranking is opt-in
+	// (ARTEX_EMBED_URL) and fails safe to the evidence order, so with it unset this
+	// is exactly the previous "top 8 by evidence" behavior.
+	const injectTopK = 8
+	lessons, err := s.m.PG().TaskLessons(context.Background(), taskID, db.LessonRerankPool)
 	if err != nil {
 		log.Printf("[rsi] lesson selection failed for task %s: %v", t.ID, err)
 		return
 	}
+	lessons = s.m.PG().RerankLessonsByEmbedding(context.Background(), taskID, lessons, injectTopK)
 	block := db.RenderLessons(lessons, 1800)
 	if block == "" {
 		return
