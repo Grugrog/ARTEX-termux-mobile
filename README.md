@@ -1,11 +1,13 @@
 <div align="center">
 
-# ARTEX
+# ARTEX-Mobile
 
 AI autonomous penetration testing system (Go backend + Next.js frontend)
 
+**Termux / arm64 build of ARTEX** — static `linux/arm64` binary, local-Postgres bring-up, and local-LLM (Ollama / llama.cpp) wiring for running on-device.
 
- Fork of [ARTEX by Autumn-27](https://github.com/Autumn-27) · English translation of the Chinese source · maintained publicly under AGPL-3.0
+
+ Fork of [ARTEX by BaaRai](https://github.com/BaaRai/ARTEX) (English translation of [Autumn-27](https://github.com/Autumn-27)'s original Chinese source) · maintained publicly under AGPL-3.0
 
 </div>
 
